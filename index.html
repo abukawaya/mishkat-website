@@ -896,32 +896,48 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 28px
+            margin-bottom: 36px;
+            height: 340px;
+            justify-content: center
         }
 
         .tasbih-beads-ring {
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, -160px);
             width: 320px;
-            height: 320px;
+            height: 380px;
             pointer-events: none
         }
 
-        .tasbih-bead {
-            position: absolute;
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: radial-gradient(circle at 35% 35%, rgba(201, 168, 76, .9), rgba(160, 120, 48, .6));
-            box-shadow: 0 2px 6px rgba(0, 0, 0, .3), inset 0 1px 2px rgba(255, 255, 255, .4);
-            transition: transform .2s, opacity .3s
+        .tasbih-bead-svg {
+            transition: transform 0.28s ease, fill 0.28s ease, opacity 0.28s ease, r 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 2.5px 2.5px rgba(0,0,0,0.35));
         }
 
-        .tasbih-bead.lit {
-            background: radial-gradient(circle at 35% 35%, #fde68a, var(--gd));
-            box-shadow: 0 0 12px rgba(201, 168, 76, .8), 0 2px 6px rgba(0, 0, 0, .3), inset 0 1px 2px rgba(255, 255, 255, .5)
+        .tassel-sway {
+            transform-origin: 160px 320px;
+            animation: tasselSway 5s ease-in-out infinite;
+        }
+
+        @keyframes tasselSway {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(3.5deg); }
+        }
+
+        .tassel-jolt {
+            animation: tasselJolt 0.55s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+            transform-origin: 160px 320px;
+        }
+
+        @keyframes tasselJolt {
+            0% { transform: rotate(0deg); }
+            15% { transform: rotate(-7deg); }
+            35% { transform: rotate(5deg); }
+            55% { transform: rotate(-2.5deg); }
+            75% { transform: rotate(1.2deg); }
+            100% { transform: rotate(0deg); }
         }
 
         #tasbihCircle {
@@ -2724,12 +2740,14 @@
             <div class="atabs">
                 <button class="atab active" onclick="showAz('sabah',this)">🌅 أذكار الصباح</button>
                 <button class="atab" onclick="showAz('masaa',this)">🌙 أذكار المساء</button>
+                <button class="atab" onclick="showAz('after_prayer',this)">🕌 بعد الصلاة المفروضة</button>
                 <button class="atab" onclick="showAz('nawm',this)">😴 أذكار النوم</button>
                 <button class="atab" onclick="showAz('karb',this)">🌊 أدعية الكرب</button>
                 <button class="atab" onclick="showAz('special',this)">💎 أدعية قوية</button>
             </div>
             <div id="az-sabah" class="alist active"></div>
             <div id="az-masaa" class="alist"></div>
+            <div id="az-after_prayer" class="alist"></div>
             <div id="az-nawm" class="alist"></div>
             <div id="az-karb" class="alist"></div>
             <div id="az-special" class="alist"></div>
@@ -2760,9 +2778,19 @@
                     <button class="tbtn" onclick="selT('sl','الصلاة على النبي ﷺ',100,this)"><span>الصلاة على النبي
                             ﷺ</span></button>
                 </div>
+                <div style="margin-bottom: 24px; display: flex; justify-content: center; align-items: center; gap: 8px;">
+                    <label for="beadMaterialSelect" style="font-size: 13px; color: var(--st); font-weight: 600;">📿 خامة المسبحة:</label>
+                    <select id="beadMaterialSelect" onchange="changeBeadMaterial(this.value)" style="padding: 6px 12px; border: 2px solid var(--crd); border-radius: 20px; font-family: 'Noto Naskh Arabic', serif; font-size: 12px; color: var(--dg); background: #fff; cursor: pointer; outline: none; transition: var(--tr);">
+                        <option value="sandalwood">🪵 خشب الصندل</option>
+                        <option value="turquoise">💎 فيروز سينائي</option>
+                        <option value="amber" selected>🍯 كهرمان ملكي</option>
+                        <option value="carnelian">🔴 عقيق يماني</option>
+                        <option value="pearl">🐚 لؤلؤ ملكي</option>
+                    </select>
+                </div>
                 <div class="tasbih-arena">
                     <!-- SVG bead ring rendered via JS -->
-                    <svg class="tasbih-beads-ring" id="beadsRingSvg" viewBox="0 0 320 320"></svg>
+                    <svg class="tasbih-beads-ring" id="beadsRingSvg" viewBox="0 0 320 380"></svg>
                     <div id="tasbihCircle" onclick="tapT()">
                         <div class="tasbih-progress-ring">
                             <svg id="tasbihProgressSvg" viewBox="0 0 224 224">
@@ -3143,6 +3171,17 @@
                 { t: "اللَّهُمَّ إِنِّي أَعُوذُ بِرِضَاكَ مِنْ سَخَطِكَ، وَبِمُعَافَاتِكَ مِنْ عُقُوبَتِكَ، لَا أُحْصِي ثَنَاءً عَلَيْكَ، أَنْتَ كَمَا أَثْنَيْتَ عَلَى نَفْسِكَ", s: "مسلم — دعاء النبي ﷺ في الركوع والسجود", n: 1 },
                 { t: "اللَّهُمَّ اجْعَلْ فِي قَلْبِي نُورًا، وَفِي لِسَانِي نُورًا، وَفِي سَمْعِي نُورًا، وَفِي بَصَرِي نُورًا، وَمِنْ فَوْقِي نُورًا، وَمِنْ تَحْتِي نُورًا، وَعَنْ يَمِينِي نُورًا، وَعَنْ يَسَارِي نُورًا، وَمِنْ أَمَامِي نُورًا، وَمِنْ خَلْفِي نُورًا، وَاجْعَلْ لِي نُورًا", s: "البخاري ومسلم — دعاء النور الشامل", n: 1 },
                 { t: "اللَّهُمَّ إِنِّي أَسْأَلُكَ بِأَنَّ لَكَ الْحَمْدَ لَا إِلَهَ إِلَّا أَنْتَ الْمَنَّانُ بَدِيعُ السَّمَاوَاتِ وَالْأَرْضِ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ يَا حَيُّ يَا قَيُّومُ", s: "أبو داود — الاسم الأعظم الذي إذا دُعي به أجاب", n: 1 }
+            ],
+            after_prayer: [
+                { t: "أَسْتَغْفِرُ اللهَ، أَسْتَغْفِرُ اللهَ، أَسْتَغْفِرُ اللهَ.\nاللَّهُمَّ أَنْتَ السَّلَامُ وَمِنْكَ السَّلَامُ، تَبَارَكْتَ يَا ذَا الْجَلَالِ وَالْإِكْرَامِ.", s: "صحيح مسلم", n: 1 },
+                { t: "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، اللَّهُمَّ لَا مَانِعَ لِمَا أَعْطَيْتَ، وَلَا مُعْطِيَ لِمَا مَنَعْتَ، وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ.", s: "البخاري ومسلم", n: 1 },
+                { t: "لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ، لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ، لَا إِلَهَ إِلَّا اللَّهُ، وَلَا نَعْبُدُ إِلَّا إِيَّاهُ، لَهُ النِّعْمَةُ وَلَهُ الْفَضْلُ، وَلَهُ الثَّنَاءُ الْحَسَنُ، لَا إِلَهَ إِلَّا اللَّهُ مُخْلِصِينَ لَهُ الدِّينَ وَلَوْ كَرِهَ الْكَافِرُونَ.", s: "صحيح مسلم", n: 1 },
+                { t: "سُبْحَانَ اللهِ (٣٣) ❁ الْحَمْدُ للهِ (٣٣) ❁ اللهُ أَكْبَرُ (٣٣)\nثم تمام المائة: لَا إِلَهَ إِلَّا اللهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ.", s: "صحيح مسلم", n: 1 },
+                { t: "أَعُوذُ بِاللَّهِ مِنَ الشَّيْطَانِ الرَّجِيمِ\nاللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۚ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ", s: "آية الكرسي — البقرة:٢٥٥", n: 1 },
+                { t: "قُلْ هُوَ اللَّهُ أَحَدٌ ❁ قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ❁ قُلْ أَعُوذُ بِرَبِّ النَّاسِ\n(مرة واحدة بعد الظهر والعصر والعشاء، وثلاث مرات بعد الفجر والمغرب)", s: "المعوذات — أبو داود والترمذي", n: 1 },
+                { t: "لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ", s: "١٠ مرات بعد الفجر والمغرب — الترمذي", n: 10 },
+                { t: "اللَّهُمَّ أَعِنِّي عَلَى ذِكْرِكَ، وَشُكْرِكَ، وَحُسْنِ عِبَادَتِكَ", s: "دبر كل صلاة — أبو داود", n: 1 },
+                { t: "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْجُبْنِ، وَأَعُوذُ بِكَ أَنْ أُرَدَّ إِلَى أَرْذَلِ الْعُمُرِ، وَأَعُوذُ بِكَ مِنْ فِتْنَةِ الدُّنْيَا، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ", s: "البخاري", n: 1 }
             ]
         };
 
@@ -3248,6 +3287,7 @@
             { id: 'isha', l: 'صلاة العشاء', d: 'في وقتها', prayer: 'Isha' },
             { id: 'sabah_az', l: 'أذكار الصباح', d: 'كاملة', prayer: null },
             { id: 'masaa_az', l: 'أذكار المساء', d: 'كاملة', prayer: null },
+            { id: 'after_prayer_az', l: 'أذكار بعد الصلاة', d: 'دبر كل صلاة', prayer: null },
             { id: 'quran', l: 'قراءة القرآن', d: 'ولو صفحة', prayer: null },
             { id: 'nawm_az', l: 'أذكار النوم', d: 'قبل النوم', prayer: null },
             { id: 'tasbih_d', l: 'التسبيح اليومي', d: '٣٣/٣٣/٣٤', prayer: null },
@@ -3429,44 +3469,189 @@
         }
 
         // ===================== TASBIH REDESIGN =====================
-        const BEAD_COUNT = 33;
+        let BEAD_COUNT = 33;
+        let currentMaterial = 'amber';
+
         function renderBeadRing() {
             const svg = document.getElementById('beadsRingSvg');
-            const cx = 160, cy = 160, r = 130;
+            if (!svg) return;
+            const cx = 160, cy = 160, r = 120;
             let html = '';
+            
+            // Dynamic bead radius based on count
+            const beadRad = BEAD_COUNT > 50 ? 3.5 : 7.5;
+            
+            // Draw thread line underneath
+            html += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(201, 168, 76, 0.35)" stroke-width="3" stroke-dasharray="1,4.5" />`;
+            
+            // Generate beads
             for (let i = 0; i < BEAD_COUNT; i++) {
                 const angle = (i / BEAD_COUNT) * 2 * Math.PI - Math.PI / 2;
-                const x = cx + r * Math.cos(angle) - 7;
-                const y = cy + r * Math.sin(angle) - 7;
-                html += `<circle class="tasbih-bead" id="bead-${i}" cx="${cx + r * Math.cos(angle)}" cy="${cy + r * Math.sin(angle)}" r="7" fill="url(#beadGrad)" opacity="0.4"/>`;
+                const bx = cx + r * Math.cos(angle);
+                const by = cy + r * Math.sin(angle);
+                html += `<circle class="tasbih-bead-svg" id="bead-${i}" cx="${bx}" cy="${by}" r="${beadRad}" fill="url(#${currentMaterial}Grad)" opacity="0.5"/>`;
             }
-            svg.innerHTML = `<defs>
-    <radialGradient id="beadGrad" cx="35%" cy="35%">
-      <stop offset="0%" stop-color="#e8c97a"/>
-      <stop offset="100%" stop-color="#a07830"/>
-    </radialGradient>
-    <radialGradient id="beadLit" cx="35%" cy="35%">
-      <stop offset="0%" stop-color="#fde68a"/>
-      <stop offset="100%" stop-color="#c9a84c"/>
-    </radialGradient>
-  </defs>${html}`;
+            
+            // Add Separators (فواصل) for target 33 (at 10.5 and 21.5)
+            if (tTarget === 33) {
+                const sepAngles = [
+                    (10.5 / 33) * 2 * Math.PI - Math.PI / 2,
+                    (21.5 / 33) * 2 * Math.PI - Math.PI / 2
+                ];
+                sepAngles.forEach((angle) => {
+                    const sx = cx + r * Math.cos(angle);
+                    const sy = cy + r * Math.sin(angle);
+                    html += `<polygon points="${sx},${sy-5} ${sx+6},${sy} ${sx},${sy+5} ${sx-6},${sy}" fill="url(#metalGrad)" filter="drop-shadow(0 1.5px 1.5px rgba(0,0,0,0.3))"/>`;
+                });
+            } else if (tTarget === 100) {
+                // separators at 33.5 and 66.5
+                const sepAngles = [
+                    (33.5 / 100) * 2 * Math.PI - Math.PI / 2,
+                    (66.5 / 100) * 2 * Math.PI - Math.PI / 2
+                ];
+                sepAngles.forEach((angle) => {
+                    const sx = cx + r * Math.cos(angle);
+                    const sy = cy + r * Math.sin(angle);
+                    html += `<polygon points="${sx},${sy-5} ${sx+6},${sy} ${sx},${sy+5} ${sx-6},${sy}" fill="url(#metalGrad)" filter="drop-shadow(0 1.5px 1.5px rgba(0,0,0,0.3))"/>`;
+                });
+            }
+            
+            // The Minaret (الشاهد) and Tassel (الشرابة) at the bottom (angle = Math.PI / 2, i.e., at 160, 280)
+            const minaretHtml = `
+            <g id="tasbihMinaret" filter="drop-shadow(0 2.5px 2.5px rgba(0,0,0,0.35))">
+                <circle cx="160" cy="280" r="7.5" fill="url(#metalGrad)" />
+                <circle cx="160" cy="280" r="4" fill="#fff" opacity="0.3" />
+                <path d="M 154 280 L 166 280 Q 164 300 162.5 315 L 157.5 315 Q 156 300 154 280 Z" fill="url(#metalGrad)" />
+                <circle cx="160" cy="315" r="5" fill="url(#metalGrad)" />
+                <g id="tasbihTassel" class="tassel-sway">
+                    <ellipse cx="160" cy="320" rx="4.5" ry="2" fill="#8a6d22" />
+                    <path d="M 160 320 Q 154 345 148 372 M 160 320 Q 159 345 158 375 M 160 320 Q 165 345 170 372" fill="none" stroke="#a07830" stroke-width="2" opacity="0.85" stroke-linecap="round" />
+                    <path d="M 160 320 Q 151 345 142 370 M 160 320 Q 168 345 176 370" fill="none" stroke="#c9a84c" stroke-width="1.3" opacity="0.9" stroke-linecap="round" />
+                    <path d="M 160 320 Q 157 345 152 374 M 160 320 Q 162 345 164 374" fill="none" stroke="#e8c97a" stroke-width="0.9" opacity="0.95" stroke-linecap="round" />
+                </g>
+            </g>`;
+            
+            svg.innerHTML = `
+            <defs>
+                <radialGradient id="sandalwoodGrad" cx="35%" cy="35%">
+                    <stop offset="0%" stop-color="#e2ba8a"/>
+                    <stop offset="45%" stop-color="#9d6d3b"/>
+                    <stop offset="90%" stop-color="#543313"/>
+                    <stop offset="100%" stop-color="#2d1904"/>
+                </radialGradient>
+                <radialGradient id="sandalwoodLit" cx="35%" cy="35%">
+                    <stop offset="0%" stop-color="#fff0d5"/>
+                    <stop offset="40%" stop-color="#e0ac70"/>
+                    <stop offset="90%" stop-color="#8a531d"/>
+                    <stop offset="100%" stop-color="#4e2b07"/>
+                </radialGradient>
+                
+                <radialGradient id="turquoiseGrad" cx="35%" cy="35%">
+                    <stop offset="0%" stop-color="#b6f3ee"/>
+                    <stop offset="40%" stop-color="#24beb3"/>
+                    <stop offset="85%" stop-color="#0a7069"/>
+                    <stop offset="100%" stop-color="#043a36"/>
+                </radialGradient>
+                <radialGradient id="turquoiseLit" cx="35%" cy="35%">
+                    <stop offset="0%" stop-color="#e8fffe"/>
+                    <stop offset="35%" stop-color="#46ede0"/>
+                    <stop offset="80%" stop-color="#12a89d"/>
+                    <stop offset="100%" stop-color="#055e58"/>
+                </radialGradient>
+                
+                <radialGradient id="carnelianGrad" cx="35%" cy="35%">
+                    <stop offset="0%" stop-color="#ffa07a"/>
+                    <stop offset="40%" stop-color="#c92a2a"/>
+                    <stop offset="85%" stop-color="#6e0f0f"/>
+                    <stop offset="100%" stop-color="#3b0202"/>
+                </radialGradient>
+                <radialGradient id="carnelianLit" cx="35%" cy="35%">
+                    <stop offset="0%" stop-color="#ffcdbb"/>
+                    <stop offset="30%" stop-color="#ff4d4d"/>
+                    <stop offset="80%" stop-color="#b31414"/>
+                    <stop offset="100%" stop-color="#660000"/>
+                </radialGradient>
+                
+                <radialGradient id="amberGrad" cx="35%" cy="35%">
+                    <stop offset="0%" stop-color="#ffea9f"/>
+                    <stop offset="40%" stop-color="#f5a623"/>
+                    <stop offset="85%" stop-color="#9b5e00"/>
+                    <stop offset="100%" stop-color="#5c3800"/>
+                </radialGradient>
+                <radialGradient id="amberLit" cx="35%" cy="35%">
+                    <stop offset="0%" stop-color="#fff8db"/>
+                    <stop offset="30%" stop-color="#ffd54f"/>
+                    <stop offset="85%" stop-color="#ff9800"/>
+                    <stop offset="100%" stop-color="#b26a00"/>
+                </radialGradient>
+                
+                <radialGradient id="pearlGrad" cx="35%" cy="35%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="35%" stop-color="#f7eee5"/>
+                    <stop offset="75%" stop-color="#dcc3b0"/>
+                    <stop offset="100%" stop-color="#a88e7a"/>
+                </radialGradient>
+                <radialGradient id="pearlLit" cx="35%" cy="35%">
+                    <stop offset="0%" stop-color="#ffffff"/>
+                    <stop offset="30%" stop-color="#fff0f2"/>
+                    <stop offset="70%" stop-color="#fcd3db"/>
+                    <stop offset="100%" stop-color="#d397a6"/>
+                </radialGradient>
+                
+                <linearGradient id="metalGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#fff3c4" />
+                    <stop offset="35%" stop-color="#e8c97a" />
+                    <stop offset="70%" stop-color="#c9a84c" />
+                    <stop offset="100%" stop-color="#856820" />
+                </linearGradient>
+            </defs>
+            <g id="tasbihLoopGroup" style="transition: transform 0.28s cubic-bezier(0.19, 1, 0.22, 1); transform-origin: 160px 160px;">
+                ${html}
+            </g>
+            ${minaretHtml}
+            `;
+            
+            syncLoopRotation(false);
         }
+
+        function changeBeadMaterial(val) {
+            currentMaterial = val;
+            lset('mishkat_tasbih_material', val);
+            renderBeadRing();
+            updateBeads();
+        }
+
+        function syncLoopRotation(animate) {
+            const group = document.getElementById('tasbihLoopGroup');
+            if (!group) return;
+            const angle = -tCount * (360 / BEAD_COUNT);
+            if (!animate) {
+                group.style.transition = 'none';
+            } else {
+                group.style.transition = 'transform 0.28s cubic-bezier(0.19, 1, 0.22, 1)';
+            }
+            group.style.transform = `rotate(${angle}deg)`;
+        }
+
         function updateBeads() {
-            const beads = document.querySelectorAll('#beadsRingSvg circle');
+            const beads = document.querySelectorAll('#beadsRingSvg .tasbih-bead-svg');
             const progress = Math.min(tCount, tTarget);
             const litCount = Math.floor((progress / tTarget) * BEAD_COUNT);
+            const beadRadNormal = BEAD_COUNT > 50 ? 3.5 : 7.5;
+            const beadRadLit = BEAD_COUNT > 50 ? 4.5 : 8.5;
             beads.forEach((b, i) => {
                 if (i < litCount) {
-                    b.setAttribute('fill', 'url(#beadLit)');
+                    b.setAttribute('fill', `url(#${currentMaterial}Lit)`);
                     b.setAttribute('opacity', '1');
-                    b.setAttribute('r', '8');
+                    b.setAttribute('r', beadRadLit);
                 } else {
-                    b.setAttribute('fill', 'url(#beadGrad)');
-                    b.setAttribute('opacity', '0.35');
-                    b.setAttribute('r', '7');
+                    b.setAttribute('fill', `url(#${currentMaterial}Grad)`);
+                    b.setAttribute('opacity', '0.45');
+                    b.setAttribute('r', beadRadNormal);
                 }
             });
         }
+
         function updateProgressRing() {
             const fill = document.getElementById('tasbihProgressFill');
             const total = 2 * Math.PI * 104;
@@ -3475,24 +3660,79 @@
             fill.style.strokeDashoffset = total * (1 - progress);
         }
 
+        function playBeadClickSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                
+                const osc1 = ctx.createOscillator();
+                const osc2 = ctx.createOscillator();
+                const gain1 = ctx.createGain();
+                const gain2 = ctx.createGain();
+                
+                osc1.type = 'triangle';
+                osc1.frequency.setValueAtTime(650, ctx.currentTime);
+                osc1.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.05);
+                
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(1300, ctx.currentTime);
+                osc2.frequency.exponentialRampToValueAtTime(300, ctx.currentTime + 0.02);
+                
+                const filter = ctx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 1200;
+                
+                osc1.connect(gain1);
+                osc2.connect(gain2);
+                gain1.connect(filter);
+                gain2.connect(filter);
+                filter.connect(ctx.destination);
+                
+                gain1.gain.setValueAtTime(0.35, ctx.currentTime);
+                gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.06);
+                
+                gain2.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.025);
+                
+                osc1.start();
+                osc2.start();
+                osc1.stop(ctx.currentTime + 0.07);
+                osc2.stop(ctx.currentTime + 0.07);
+            } catch (e) {}
+        }
+
         function selT(type, lbl, target, btn) {
             tType = type; tLbl = lbl; tTarget = target; tCount = 0;
+            BEAD_COUNT = target; // Update bead count dynamically to match target
             document.getElementById('tc').textContent = '0';
             document.getElementById('tl').textContent = lbl;
             document.getElementById('ttot').textContent = 'الهدف: ' + target + ' | المجموع: 0';
             document.querySelectorAll('.tbtn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            
+            renderBeadRing();
             updateBeads(); updateProgressRing();
         }
+
         function tapT() {
             tCount++;
             document.getElementById('tc').textContent = tCount;
             document.getElementById('ttot').textContent = 'الهدف: ' + tTarget + ' | المجموع: ' + tCount;
-            // animate orb
+            
             const orb = document.getElementById('tasbihCircle');
             orb.classList.remove('tasbih-pulse');
             void orb.offsetWidth;
             orb.classList.add('tasbih-pulse');
+            
+            syncLoopRotation(true);
+            playBeadClickSound();
+            
+            const tassel = document.getElementById('tasbihTassel');
+            if (tassel) {
+                tassel.classList.remove('tassel-jolt');
+                void tassel.offsetWidth;
+                tassel.classList.add('tassel-jolt');
+            }
+            
             updateBeads(); updateProgressRing();
             if (tCount === tTarget) {
                 showN('مبروك! أتممت ' + tLbl + ' 🎉');
@@ -3502,7 +3742,15 @@
             }
             if (navigator.vibrate) navigator.vibrate(18);
         }
-        function rstT() { tCount = 0; document.getElementById('tc').textContent = '0'; document.getElementById('ttot').textContent = 'الهدف: ' + tTarget + ' | المجموع: 0'; updateBeads(); updateProgressRing() }
+
+        function rstT() { 
+            tCount = 0; 
+            document.getElementById('tc').textContent = '0'; 
+            document.getElementById('ttot').textContent = 'الهدف: ' + tTarget + ' | المجموع: 0'; 
+            syncLoopRotation(false);
+            updateBeads(); updateProgressRing(); 
+        }
+
         function saveT() {
             if (!tCount) { showN('لا شيء لحفظه'); return }
             const e = { l: tLbl, c: tCount, d: new Date().toLocaleTimeString('ar-EG', { hour: '2-digit', minute: '2-digit' }) };
@@ -3511,6 +3759,7 @@
             totalT += tCount; lset('mishkat_tt', totalT);
             updateStats(); renderTH(); showN('تم حفظ التسبيحات ✅'); rstT();
         }
+
         function renderTH() {
             const el = document.getElementById('thisL');
             if (!tHist.length) { el.innerHTML = '<p style="color:var(--st);font-size:13px">لا يوجد سجل</p>'; return }
@@ -3745,6 +3994,17 @@
             schedule(22 * 60, '😴', 'أذكار النوم 🌙', 'الراحة الحقيقية ليست في النوم — بل في ذكر الله.');
             schedule(9 * 60, '🕌', 'تذكير صباحي', 'كل يوم فرصة جديدة للتقرب من الله 💚');
 
+            // جدولة أذكار بعد الصلاة المفروضة (بعد ١٥ دقيقة من دخول وقت كل صلاة مكتوبة)
+            const pNames = { Fajr: 'الفجر', Dhuhr: 'الظهر', Asr: 'العصر', Maghrib: 'المغرب', Isha: 'العشاء' };
+            Object.entries(pNames).forEach(([pKey, pName]) => {
+                if (prayerTimes[pKey]) {
+                    const min = timeToMin(prayerTimes[pKey]);
+                    if (min) {
+                        schedule(min + 15, '🕌', 'أذكار بعد الصلاة', `تقبل الله صلاتك، لا تنسَ قراءة أذكار بعد صلاة ${pName} المفروضة 💚`);
+                    }
+                }
+            });
+
             // Add Daily Ward/Goal Reminder at 9:00 PM (21:00)
             schedule(21 * 60, '📊', 'تتبع وردك اليومي', 'يا غالي، لا تنسَ تقييد وتتبع وردك اليومي من صلوات وأذكار في مشكاة الروح 💚');
 
@@ -3753,7 +4013,9 @@
             schedule(16 * 60, '✨', 'أبقِ لسانك رطبًا', 'أكثر من الصلاة على النبي محمد ﷺ في هذا الوقت المبارك 💚');
             schedule(20 * 60, '✨', 'أبقِ لسانك رطبًا', 'كنز من كنوز الجنة: لا حول ولا قوة إلا بالله العلي العظيم 🌱');
 
-            setInterval(() => scheduleNotifications(), 3600000);
+            if (!window.notifScheduleInterval) {
+                window.notifScheduleInterval = setInterval(() => scheduleNotifications(), 3600000);
+            }
         }
         function playNotifSound() {
             try {
@@ -3935,7 +4197,7 @@
             });
 
             const prayersDone = ['fajr', 'duhr', 'asr', 'maghrib', 'isha'].filter(k => trackerSt[k]).length;
-            const azkarDone = ['sabah_az', 'masaa_az', 'nawm_az'].filter(k => trackerSt[k]).length;
+            const azkarDone = ['sabah_az', 'masaa_az', 'after_prayer_az', 'nawm_az'].filter(k => trackerSt[k]).length;
             if (charts.radar) charts.radar.destroy();
             charts.radar = new Chart(document.getElementById('radarChart'), {
                 type: 'radar',
@@ -3943,7 +4205,7 @@
                     labels: ['الصلوات', 'الأذكار', 'القرآن', 'التسبيح', 'الدعاء', 'الصدقة'],
                     datasets: [{
                         label: 'اليوم',
-                        data: [prayersDone / 5 * 100, azkarDone / 3 * 100, trackerSt['quran'] ? 100 : 0, trackerSt['tasbih_d'] ? 100 : 0, trackerSt['dua'] ? 100 : 0, trackerSt['sadaka'] ? 100 : 0],
+                        data: [prayersDone / 5 * 100, azkarDone / 4 * 100, trackerSt['quran'] ? 100 : 0, trackerSt['tasbih_d'] ? 100 : 0, trackerSt['dua'] ? 100 : 0, trackerSt['sadaka'] ? 100 : 0],
                         backgroundColor: 'rgba(201,168,76,.1)', borderColor: 'rgba(201,168,76,.65)',
                         pointBackgroundColor: 'rgba(201,168,76,.85)', borderWidth: 2, pointRadius: 4
                     }]
@@ -4070,6 +4332,9 @@
             renderAz(); renderD('anb'); renderQ(); renderSurahs(); renderY(); renderH(); renderDaiyah();
             renderTracker(); renderTH(); updateStats();
             loadPrayers();
+            currentMaterial = ls('mishkat_tasbih_material') || 'amber';
+            const selectEl = document.getElementById('beadMaterialSelect');
+            if (selectEl) selectEl.value = currentMaterial;
             renderBeadRing(); updateBeads(); updateProgressRing();
             setTimeout(() => updateCharts(), 500);
             document.getElementById('ci').addEventListener('keypress', e => { if (e.key === 'Enter') sendMsg() });
