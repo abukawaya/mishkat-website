@@ -1394,6 +1394,157 @@
             color: var(--st)
         }
 
+        /* === TASBIH CONFIG CARD === */
+        .tasbih-config-card {
+            background: #fff;
+            border: 2px solid var(--crd);
+            border-radius: var(--br);
+            padding: 24px;
+            margin: 24px auto;
+            max-width: 700px;
+            text-align: right;
+            box-shadow: var(--sh);
+            transition: var(--tr);
+        }
+
+        .tasbih-config-card:hover {
+            box-shadow: var(--shl);
+        }
+
+        .tasbih-config-card h4 {
+            font-family: 'Amiri', serif;
+            font-size: 18px;
+            color: var(--dg);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tasbih-config-card .config-header p {
+            font-size: 12.5px;
+            color: var(--st);
+            margin-bottom: 20px;
+        }
+
+        .config-section {
+            margin-bottom: 22px;
+            padding-bottom: 18px;
+            border-bottom: 1.5px dashed var(--crd);
+        }
+
+        .config-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .config-label {
+            display: block;
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--dg);
+            margin-bottom: 12px;
+        }
+
+        .target-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .target-quick-btn {
+            background: var(--crl);
+            border: 1.5px solid var(--crd);
+            color: var(--dg);
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 13px;
+            padding: 7px 16px;
+            border-radius: 24px;
+            cursor: pointer;
+            transition: var(--tr);
+            font-weight: 600;
+        }
+
+        .target-quick-btn:hover {
+            background: var(--dg);
+            color: #fff;
+            border-color: var(--dg);
+            transform: translateY(-1px);
+        }
+
+        .custom-target-input input {
+            width: 120px;
+            padding: 7px 14px;
+            border: 1.5px solid var(--crd);
+            border-radius: 24px;
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 13px;
+            text-align: center;
+            color: var(--dg);
+            outline: none;
+            transition: var(--tr);
+        }
+
+        .custom-target-input input:focus {
+            border-color: var(--gd);
+            box-shadow: 0 0 0 3px rgba(201, 168, 76, .18);
+        }
+
+        .add-tasbih-controls {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .add-tasbih-controls input[type="text"] {
+            flex: 2;
+            min-width: 200px;
+            padding: 10px 16px;
+            border: 1.5px solid var(--crd);
+            border-radius: 12px;
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 13.5px;
+            outline: none;
+            transition: var(--tr);
+        }
+
+        .add-tasbih-controls input[type="number"] {
+            width: 100px;
+            padding: 10px 12px;
+            border: 1.5px solid var(--crd);
+            border-radius: 12px;
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 13.5px;
+            text-align: center;
+            outline: none;
+            transition: var(--tr);
+        }
+
+        .add-tasbih-controls input:focus {
+            border-color: var(--gd);
+            box-shadow: 0 0 0 3px rgba(201, 168, 76, .18);
+        }
+
+        .add-tasbih-controls button {
+            padding: 10px 24px;
+            font-size: 13.5px;
+            border-radius: 12px;
+            margin: 0;
+            white-space: nowrap;
+        }
+
+        .delete-custom-tasbih {
+            transition: var(--tr) !important;
+        }
+
+        .delete-custom-tasbih:hover {
+            color: #ff3333 !important;
+            transform: translateY(-50%) scale(1.2) !important;
+        }
+
         /* DUAS */
         .dtabs {
             display: flex;
@@ -3353,42 +3504,199 @@
         }
 
         footer {
-            background: linear-gradient(135deg, #070f0b, var(--dg));
-            color: rgba(255, 255, 255, .6);
-            text-align: center;
-            padding: 40px 24px
+            background: linear-gradient(135deg, #070f0b 0%, #0d281a 50%, #070f0b 100%);
+            color: rgba(255, 255, 255, .7);
+            text-align: right;
+            padding: 60px 24px 30px;
+            border-top: 3px solid var(--gd);
+            position: relative;
         }
 
-        .footer-logo {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid var(--gd);
-            margin: 0 auto 14px;
-            display: block;
-            opacity: .9
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1.5fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
         }
 
-        footer .fl {
+        .footer-col {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer-col h3 {
             font-family: 'Amiri', serif;
-            font-size: 22px;
+            font-size: 20px;
             color: var(--gl);
-            margin-bottom: 8px
+            position: relative;
+            padding-bottom: 8px;
+            border-bottom: 1.5px solid rgba(201, 168, 76, 0.25);
         }
 
-        footer p {
+        .footer-col p {
+            font-size: 13.5px;
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Goal box styling */
+        .goal-box {
+            background: rgba(201, 168, 76, 0.08);
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 10px;
+            border-right: 4px solid var(--gd);
+            box-shadow: 0 4px 15px rgba(26, 74, 58, 0.1);
+        }
+
+        .goal-box h4 {
+            font-family: 'Amiri', serif;
+            color: var(--gl);
+            font-size: 16px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .goal-box p {
+            font-size: 12.5px;
+            color: rgba(255, 255, 255, 0.85);
+            margin: 0;
+        }
+
+        /* Admins list styling */
+        .admins-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .admin-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            transition: var(--tr);
+        }
+
+        .admin-card:hover {
+            background: rgba(201, 168, 76, 0.05);
+            border-color: rgba(201, 168, 76, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .admin-name {
+            font-family: 'Amiri', serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .admin-role {
+            font-size: 11px;
+            background: rgba(201, 168, 76, 0.2);
+            color: var(--gl);
+            padding: 2px 8px;
+            border-radius: 20px;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+        }
+
+        .admin-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+        }
+
+        /* Contact/Join columns styling */
+        .join-btn {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: #fff !important;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 13.5px;
+            font-weight: 600;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--tr);
+            border: none;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+            text-decoration: none;
+        }
+
+        .join-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35);
+            color: #fff;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gl) !important;
+            text-decoration: none;
             font-size: 13px;
-            line-height: 1.8
+            transition: var(--tr);
+            justify-content: center;
+            font-weight: 600;
         }
 
-        footer a {
-            color: var(--gl);
-            text-decoration: none
+        .contact-link:hover {
+            background: rgba(201, 168, 76, 0.1);
+            border-color: var(--gd);
+            color: #fff !important;
         }
 
-        footer a:hover {
-            color: #fff
+        /* Footer Bottom */
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.45);
+        }
+
+        @media(max-width: 900px) {
+            .footer-inner {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            footer {
+                text-align: center;
+            }
+
+            .footer-col h3 {
+                display: inline-block;
+                margin: 0 auto 10px;
+                padding-bottom: 6px;
+            }
+
+            .admin-card {
+                text-align: right;
+            }
         }
 
         /* AFUW special section */
@@ -3711,18 +4019,8 @@
                 <p>سبّح الله واذكره — فاضغط على الدائرة لكل تسبيحة</p>
             </div>
             <div class="tsec">
-                <div class="tbtns">
-                    <button class="tbtn active" onclick="selT('s','سبحان الله',33,this)"><span>سبحان
-                            الله</span></button>
-                    <button class="tbtn" onclick="selT('h','الحمد لله',33,this)"><span>الحمد لله</span></button>
-                    <button class="tbtn" onclick="selT('a','الله أكبر',34,this)"><span>الله أكبر</span></button>
-                    <button class="tbtn" onclick="selT('l','لا إله إلا الله',100,this)"><span>لا إله إلا
-                            الله</span></button>
-                    <button class="tbtn" onclick="selT('i','أستغفر الله',100,this)"><span>أستغفر الله</span></button>
-                    <button class="tbtn" onclick="selT('hw','لا حول ولا قوة',33,this)"><span>لا حول ولا
-                            قوة</span></button>
-                    <button class="tbtn" onclick="selT('sl','الصلاة على النبي ﷺ',100,this)"><span>الصلاة على النبي
-                            ﷺ</span></button>
+                <div class="tbtns" id="tasbihButtonsContainer">
+                    <!-- سيتم تحميل الأزرار ديناميكياً من الجافا سكريبت -->
                 </div>
                 <!-- MATERIAL PICKER -->
                 <div style="margin-bottom:12px;text-align:center">
@@ -3807,6 +4105,44 @@
                     <button class="btn-s" onclick="rstT()">↺ إعادة</button>
                     <button class="btn-g" onclick="saveT()">💾 حفظ الجلسة</button>
                 </div>
+
+                <!-- لوحة التخصيص والإعدادات الجديدة للمسبحة -->
+                <div class="tasbih-config-card">
+                    <div class="config-header">
+                        <h4>⚙️ تخصيص وإعدادات المسبحة</h4>
+                        <p>تعديل هدف الذكر النشط أو إضافة ذكر/تسبيحة جديدة خاصة بك</p>
+                    </div>
+                    <div class="config-body">
+                        <!-- تعديل هدف الذكر النشط -->
+                        <div class="config-section">
+                            <span class="config-label">🎯 تعديل هدف التسبيح الحالي:</span>
+                            <div class="target-controls">
+                                <button class="target-quick-btn" onclick="updateCurrentTarget(10)">١٠</button>
+                                <button class="target-quick-btn" onclick="updateCurrentTarget(33)">٣٣</button>
+                                <button class="target-quick-btn" onclick="updateCurrentTarget(99)">٩٩</button>
+                                <button class="target-quick-btn" onclick="updateCurrentTarget(100)">١٠٠</button>
+                                <button class="target-quick-btn" onclick="updateCurrentTarget(1000)">١٠٠٠</button>
+                                <div class="custom-target-input">
+                                    <input type="number" id="customTargetInput" min="1" max="10000"
+                                        placeholder="هدف مخصص..." oninput="updateCurrentTargetFromInput(this.value)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- إضافة تسبيحة جديدة -->
+                        <div class="config-section">
+                            <span class="config-label">➕ إضافة ذكر/تسبيحة جديدة:</span>
+                            <div class="add-tasbih-controls">
+                                <input type="text" id="newTasbihText"
+                                    placeholder="اكتب الذكر هنا (مثال: سبحان الله وبحمده)..." maxlength="50">
+                                <input type="number" id="newTasbihTarget" min="1" max="10000" value="33"
+                                    placeholder="الهدف...">
+                                <button class="btn-g" onclick="addNewTasbih()">إضافة الذكر ➕</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="thist">
                     <h4>📜 سجل اليوم</h4>
                     <div id="thisL">
@@ -4199,14 +4535,69 @@
     </section>
 
     <footer>
-        <img class="footer-logo" src="logo.jpeg" alt="مشكاة الروح">
-        <div class="fl">مِشكاة الروح</div>
-        <p>"اللَّهُ نُورُ السَّمَاوَاتِ وَالْأَرْضِ" — النور:٣٥<br>
-            <a href="https://chat.whatsapp.com/H9fToCXbq50CiatF4GA9kj" target="_blank">📱 انضم لقروب واتساب</a><br>
-            <span style="display:inline-block;margin-top:8px;font-size:12px;opacity:0.85;">📞 للتواصل (المبرمج محمد عبد
-                المطلب): <a href="https://wa.me/201551357366" target="_blank"
-                    style="color:var(--gl);text-decoration:underline;direction:ltr;display:inline-block;">+201551357366</a></span>
-        </p>
+        <div class="footer-inner">
+            <!-- العمود الأول: التعريف بمشكاة الروح والهدف السامي -->
+            <div class="footer-col">
+                <h3>💡 مِشكاة الروح</h3>
+                <p>مساحتك النورانية الهادئة ورفيقك الصالح لتجديد إيمانك وتغذية روحك وسط زحام هذه الدنيا. نسعى جاهدين
+                    لنشر الخير والعلم النافع وتعليم الناس فضل الذكر والدعاء.</p>
+                <div class="goal-box">
+                    <h4>💚 هدفنا الأسمى</h4>
+                    <p>أن تعمّ الهداية جميع الناس، وتُشرق أنوار الإيمان والطمأنينة في كل قلب وبيت مسلم.</p>
+                </div>
+            </div>
+
+            <!-- العمود الثاني: فريق العمل والإدارة -->
+            <div class="footer-col">
+                <h3>👤 إدارة مشكاة الروح</h3>
+                <div class="admins-list">
+                    <!-- محمد عبد المطلب -->
+                    <div class="admin-card">
+                        <div class="admin-header">
+                            <span class="admin-name">محمد عبد المطلب</span>
+                            <span class="admin-role">صانع ومبرمج الموقع</span>
+                        </div>
+                        <div class="admin-desc">هو من قام بصناعة وتطوير هذا الموقع المبارك واختار له هذا الاسم النوراني
+                            "مِشكاة الروح".</div>
+                    </div>
+                    <!-- عمار ياسر -->
+                    <div class="admin-card">
+                        <div class="admin-header">
+                            <span class="admin-name">عمار ياسر</span>
+                            <span class="admin-role">أدمن ومؤسس القروب</span>
+                        </div>
+                        <div class="admin-desc">الأدمن والمشرف المخلص لمجتمع وقروب مشكاة الروح على واتساب.</div>
+                    </div>
+                    <!-- أبو بكر -->
+                    <div class="admin-card">
+                        <div class="admin-header">
+                            <span class="admin-name">أبو بكر</span>
+                            <span class="admin-role">أدمن ومؤسس القروب</span>
+                        </div>
+                        <div class="admin-desc">الأدمن والمشرف المشارك الباذل جهده في نشر الهدى والخير ومتابعة الأعضاء.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- العمود الثالث: روابط الانضمام والتواصل -->
+            <div class="footer-col">
+                <h3>📱 انضم إلينا وتواصل معنا</h3>
+                <p>كن جزءاً من مجتمعنا الإيماني وشاركنا الأجر بنشر الخير بين الناس.</p>
+                <a href="https://chat.whatsapp.com/H9fToCXbq50CiatF4GA9kj" target="_blank" class="join-btn">
+                    <span>📱 انضم لقروب الواتساب الرسمي</span>
+                </a>
+                <p style="margin-top: 10px; font-size: 12.5px;">للتواصل مع مبرمج ومؤسس الموقع (محمد عبد المطلب):</p>
+                <a href="https://wa.me/201551357366" target="_blank" class="contact-link">
+                    <span>💬 تواصل عبر الواتساب</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- الجزء السفلي للحقوق -->
+        <div class="footer-bottom">
+            <span>مِشكاة الروح — "اللَّهُ نُورُ السَّمَاوَاتِ وَالْأَرْضِ" (النور: ٣٥) © ٢٠٢٦</span>
+        </div>
     </footer>
 
     <script>
@@ -4456,6 +4847,122 @@
         }
 
         // ===================== TASBIH =====================
+        const defaultTasbihs = [
+            { id: 's', lbl: 'سبحان الله', target: 33 },
+            { id: 'h', lbl: 'الحمد لله', target: 33 },
+            { id: 'a', lbl: 'الله أكبر', target: 34 },
+            { id: 'l', lbl: 'لا إله إلا الله', target: 100 },
+            { id: 'i', lbl: 'أستغفر الله', target: 100 },
+            { id: 'hw', lbl: 'لا حول ولا قوة إلا بالله', target: 33 },
+            { id: 'sl', lbl: 'الصلاة على النبي ﷺ', target: 100 }
+        ];
+        let customTasbihs = JSON.parse(ls('mishkat_custom_tasbihs') || '[]');
+
+        function renderTasbihButtons() {
+            const container = document.getElementById('tasbihButtonsContainer');
+            if (!container) return;
+            let html = '';
+            defaultTasbihs.forEach(t => {
+                const isActive = (tLbl === t.lbl);
+                html += `<button class="tbtn ${isActive ? 'active' : ''}" onclick="selT('${t.id}','${t.lbl}',${t.target},this)"><span>${t.lbl}</span></button>`;
+            });
+            customTasbihs.forEach((t, index) => {
+                const isActive = (tLbl === t.lbl);
+                html += `<button class="tbtn ${isActive ? 'active' : ''}" onclick="selT('${t.id}','${t.lbl}',${t.target},this)" style="position:relative; padding-left: 28px;">
+                    <span>${t.lbl}</span>
+                    <span class="delete-custom-tasbih" onclick="deleteCustomTasbih(${index}, event)" style="position:absolute; left:6px; top:50%; transform:translateY(-50%); color:rgba(255,0,0,0.6); font-size:16px; font-weight:bold; cursor:pointer; padding:2px 6px; z-index:10;">×</span>
+                </button>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function updateCurrentTarget(val) {
+            val = parseInt(val);
+            if (isNaN(val) || val < 1) return;
+            tTarget = val;
+            BEAD_COUNT = val <= 100 ? val : 100;
+
+            document.getElementById('ttot').textContent = 'الهدف: ' + tTarget + ' | المجموع: ' + tCount;
+            const customInput = document.getElementById('customTargetInput');
+            if (customInput) customInput.value = val;
+
+            renderBeadRing();
+            updateBeads();
+            updateProgressRing();
+
+            const currentDefault = defaultTasbihs.find(t => t.lbl === tLbl);
+            if (currentDefault) {
+                currentDefault.target = val;
+            } else {
+                const currentCustom = customTasbihs.find(t => t.lbl === tLbl);
+                if (currentCustom) {
+                    currentCustom.target = val;
+                    lset('mishkat_custom_tasbihs', JSON.stringify(customTasbihs));
+                }
+            }
+            renderTasbihButtons();
+        }
+
+        function updateCurrentTargetFromInput(val) {
+            if (val === '') return;
+            updateCurrentTarget(val);
+        }
+
+        function addNewTasbih() {
+            const textInp = document.getElementById('newTasbihText');
+            const targetInp = document.getElementById('newTasbihTarget');
+            const text = textInp.value.trim();
+            const target = parseInt(targetInp.value);
+
+            if (!text) {
+                showN('الرجاء كتابة الذكر أولاً 😊');
+                return;
+            }
+            if (isNaN(target) || target < 1) {
+                showN('الرجاء إدخال هدف تسبيح صحيح 🎯');
+                return;
+            }
+
+            const isExist = defaultTasbihs.some(t => t.lbl === text) || customTasbihs.some(t => t.lbl === text);
+            if (isExist) {
+                showN('هذا الذكر موجود بالفعل 📿');
+                return;
+            }
+
+            const newId = 'c_' + Date.now();
+            const newTasbih = { id: newId, lbl: text, target: target };
+            customTasbihs.push(newTasbih);
+            lset('mishkat_custom_tasbihs', JSON.stringify(customTasbihs));
+
+            textInp.value = '';
+
+            renderTasbihButtons();
+            showN('تمت إضافة الذكر الجديد بنجاح 🎉');
+
+            // Auto select the newly added tasbih
+            setTimeout(() => {
+                const buttons = document.querySelectorAll('.tbtns .tbtn');
+                const lastBtn = buttons[buttons.length - 1];
+                if (lastBtn) lastBtn.click();
+            }, 50);
+        }
+
+        function deleteCustomTasbih(index, event) {
+            if (event) event.stopPropagation();
+            const deleted = customTasbihs[index];
+            customTasbihs.splice(index, 1);
+            lset('mishkat_custom_tasbihs', JSON.stringify(customTasbihs));
+
+            if (tLbl === deleted.lbl) {
+                setTimeout(() => {
+                    const firstBtn = document.querySelector('.tbtns .tbtn');
+                    if (firstBtn) firstBtn.click();
+                }, 50);
+            }
+            renderTasbihButtons();
+            showN('تم حذف الذكر 🗑️');
+        }
+
         function selectMaterial(mat, el) {
             currentMaterial = mat;
             lset('mishkat_tasbih_material', mat);
@@ -4572,12 +5079,15 @@
         }
         function selT(type, lbl, target, btn) {
             tType = type; tLbl = lbl; tTarget = target; tCount = 0;
-            BEAD_COUNT = target;
+            BEAD_COUNT = target <= 100 ? target : 100;
             document.getElementById('tc').textContent = '0';
             document.getElementById('tl').textContent = lbl;
             document.getElementById('ttot').textContent = 'الهدف: ' + target + ' | المجموع: 0';
+            const customInput = document.getElementById('customTargetInput');
+            if (customInput) customInput.value = target;
             document.querySelectorAll('.tbtn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            const targetBtn = btn ? (btn.closest('.tbtn') || btn) : null;
+            if (targetBtn) targetBtn.classList.add('active');
             renderBeadRing(); updateBeads(); updateProgressRing();
         }
         function tapT() {
@@ -5239,6 +5749,13 @@
             loadPrayers();
             loadAzkarSchedule();
             renderOcc('juma');
+
+            // تهيئة أزرار التسبيح التفاعلية والمزامنة
+            renderTasbihButtons();
+            BEAD_COUNT = tTarget <= 100 ? tTarget : 100;
+            const customInput = document.getElementById('customTargetInput');
+            if (customInput) customInput.value = tTarget;
+
             currentMaterial = ls('mishkat_tasbih_material') || 'amber';
             const savedBeadSize = ls('mishkat_bead_size');
             if (savedBeadSize) { beadRadius = parseFloat(savedBeadSize); const sr = document.getElementById('beadSizeRange'); if (sr) sr.value = savedBeadSize; }
