@@ -4249,7 +4249,13 @@
 
         function ls(k) { try { return localStorage.getItem(k) } catch { return null } }
         function lset(k, v) { try { localStorage.setItem(k, v) } catch { } }
-        function today() { return new Date().toISOString().split('T')[0] }
+        function today() {
+            const d = new Date();
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
         function timeToMin(t) { if (!t || t === '--:--') return null; const [h, m] = t.split(':').map(Number); return h * 60 + m }
         function nowMin() { const d = new Date(); return d.getHours() * 60 + d.getMinutes() }
         function format12h(tStr) { if (!tStr || tStr === '--:--') return '--:--'; const parts = tStr.split(':'); let h = parseInt(parts[0], 10); const m = parts[1]; const suffix = h >= 12 ? 'م' : 'ص'; h = h % 12; if (h === 0) h = 12; return `${h}:${m} ${suffix}` }
@@ -4771,15 +4777,46 @@
             setTimeout(() => n.classList.add('show'), 10);
             setTimeout(() => { n.classList.remove('show'); setTimeout(() => n.remove(), 400) }, 2800);
         }
-        function showRichNotif(ico, title, msg) {
+        function showRichNotif(ico, title, msg, id = '') {
             const panel = document.getElementById('notifPanel');
             const toast = document.createElement('div'); toast.className = 'notif-toast';
             toast.innerHTML = `<div class="nt-ico">${ico}</div><div class="nt-body"><div class="nt-title">${title}</div><div class="nt-msg">${msg}</div></div><button class="nt-close" onclick="dismissToast(this.parentElement)">✕</button>`;
+
+            const sectionMap = {
+                'sabah_az_remind': 'sabah',
+                'azkar_sabah_p': 'sabah',
+                'masaa_az_remind': 'masaa',
+                'azkar_masaa_p': 'masaa',
+                'nawm_az_remind': 'nawm',
+                'after_az_remind': 'after_prayer',
+                'after_Fajr': 'after_prayer',
+                'after_Dhuhr': 'after_prayer',
+                'after_Asr': 'after_prayer',
+                'after_Maghrib': 'after_prayer',
+                'after_Isha': 'after_prayer'
+            };
+            const section = sectionMap[id] || '';
+
+            toast.style.cursor = 'pointer';
+            toast.addEventListener('click', function (e) {
+                if (e.target.classList.contains('nt-close')) return;
+                if (section) {
+                    triggerAzkarSection(section);
+                    dismissToast(toast);
+                }
+            });
+
             panel.appendChild(toast);
             setTimeout(() => dismissToast(toast), 12000);
             if (ls('mishkat_notif_enabled') === 'true' && "Notification" in window && Notification.permission === 'granted') {
                 const titleText = ico + ' ' + title;
-                const options = { body: msg, icon: 'logo.jpeg', badge: 'logo.jpeg', dir: 'rtl' };
+                const options = {
+                    body: msg,
+                    icon: 'logo.jpeg',
+                    badge: 'logo.jpeg',
+                    dir: 'rtl',
+                    data: { section: section }
+                };
                 if ('serviceWorker' in navigator) {
                     navigator.serviceWorker.ready.then(function (reg) {
                         reg.showNotification(titleText, options);
@@ -4826,7 +4863,7 @@
             if (ls('mishkat_notif_enabled') !== 'true') return;
             if (ls(_getNotifKey(id))) return;
             lset(_getNotifKey(id), '1');
-            showRichNotif(ico, title, msg);
+            showRichNotif(ico, title, msg, id);
             playNotifSound();
         }
         function _buildSchedule() {
@@ -4890,6 +4927,54 @@
             _tickNotifClock();
             _notifClockId = setInterval(_tickNotifClock, 60 * 1000);
         }
+        function triggerAzkarSection(section) {
+            const tabKeys = {
+                'sabah': 'sabah',
+                'masaa': 'masaa',
+                'after_prayer': 'after_prayer',
+                'nawm': 'nawm'
+            };
+            const targetKey = tabKeys[section];
+            if (targetKey) {
+                const buttons = document.querySelectorAll('.atabs .atab');
+                buttons.forEach(btn => {
+                    const clickAttr = btn.getAttribute('onclick') || '';
+                    if (clickAttr.includes(`'${targetKey}'`) || clickAttr.includes(`"${targetKey}"`)) {
+                        btn.click();
+                    }
+                });
+            }
+            const el = document.getElementById('azkar');
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        function handleHashRoute() {
+            const hash = window.location.hash;
+            if (hash && hash.startsWith('#azkar-')) {
+                const section = hash.substring('#azkar-'.length);
+                setTimeout(() => {
+                    triggerAzkarSection(section);
+                }, 300);
+            }
+        }
+        window.addEventListener('hashchange', handleHashRoute);
+        window.addEventListener('load', handleHashRoute);
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', function (event) {
+                if (event.data && event.data.action === 'openSection') {
+                    triggerAzkarSection(event.data.section);
+                }
+            });
+        }
+        document.addEventListener('visibilitychange', function () {
+            if (document.visibilityState === 'visible') {
+                _tickNotifClock();
+            }
+        });
+        window.addEventListener('focus', function () {
+            _tickNotifClock();
+        });
         function playNotifSound() {
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
