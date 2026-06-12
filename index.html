@@ -4778,7 +4778,17 @@
             panel.appendChild(toast);
             setTimeout(() => dismissToast(toast), 12000);
             if (ls('mishkat_notif_enabled') === 'true' && "Notification" in window && Notification.permission === 'granted') {
-                try { new Notification(ico + ' ' + title, { body: msg, icon: 'logo.jpeg', dir: 'rtl' }); } catch (e) { }
+                const titleText = ico + ' ' + title;
+                const options = { body: msg, icon: 'logo.jpeg', badge: 'logo.jpeg', dir: 'rtl' };
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.ready.then(function (reg) {
+                        reg.showNotification(titleText, options);
+                    }).catch(function (err) {
+                        try { new Notification(titleText, options); } catch (e) { }
+                    });
+                } else {
+                    try { new Notification(titleText, options); } catch (e) { }
+                }
             }
         }
         function dismissToast(el) { if (!el || !el.parentElement) return; el.classList.add('hiding'); setTimeout(() => { if (el.parentElement) el.parentElement.removeChild(el) }, 350) }
